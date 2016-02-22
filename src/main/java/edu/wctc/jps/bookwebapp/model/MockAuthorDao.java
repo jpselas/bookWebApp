@@ -32,8 +32,20 @@ public class MockAuthorDao implements AuthorDaoStrategy {
         return authors;
     }
     
+    public int deleteAuthorById(Object id){
+        return 1;
+    }
     
-    
-    
+
+
+    @Override
+    public int updateRecordsById(Author author) throws ClassNotFoundException, SQLException {
+        return 1;
+    }
+
+    @Override
+    public int insertAuthor(Author author) throws SQLException, ClassNotFoundException {
+        return 1;
+    }
     
 }

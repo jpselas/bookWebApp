@@ -7,6 +7,7 @@ package edu.wctc.jps.bookwebapp.model;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,10 @@ public class AuthorDao implements AuthorDaoStrategy {
     private final String USERNAME = "root";
     private final String PASSWORD = "admin";
     
+    private static final String AUTHOR_ID = "author_id";
+    private static final String AUTHOR_NAME = "author_name";
+    private static final String DATE_ADDED = "date_added";
+    private static final String TABLE_NAME="author";
     
     @Override
     public List<Author> getAuthorList() throws SQLException, ClassNotFoundException{
@@ -46,7 +51,40 @@ public class AuthorDao implements AuthorDaoStrategy {
         db.closeConnection();
         return authors;
     }
+    @Override
+    public int deleteAuthorById(Object id) throws ClassNotFoundException, SQLException{
+        db.openConnection(DRIVER, URL, USERNAME, PASSWORD);
+        int result = db.deleteRecordbyPrimaryKey("author", "author_id", id);
+        db.closeConnection();
+        
+        return result;
+    }
     
+    
+    public int insertAuthor(Author author) throws SQLException, ClassNotFoundException{
+        
+            db.openConnection(DRIVER, URL, USERNAME, PASSWORD);
+            List<String> authorColumns = Arrays.asList(AUTHOR_NAME, DATE_ADDED);;
+            List<Object> authorValues = Arrays.asList(author.getAuthorName(), author.getDateAdded());
+            int numAuthor = db.insertRecord(TABLE_NAME, authorColumns, authorValues);
+            
+        
+            db.closeConnection();
+            return numAuthor;
+    }
+    
+    @Override
+    public int updateRecordsById(Author author) throws ClassNotFoundException, SQLException{
+        
+        db.openConnection(DRIVER, URL, USERNAME, PASSWORD);
+        List<String> colNames = Arrays.asList(AUTHOR_NAME, DATE_ADDED);;
+        List<Object> colValues = Arrays.asList(author.getAuthorName(), author.getDateAdded());
+        int primaryKeyValue = author.getAuthorId();
+        int result = db.updateRecordById(TABLE_NAME, colNames,colValues,AUTHOR_ID, primaryKeyValue);
+        
+        db.closeConnection();
+        return result;
+    }
     
     
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
