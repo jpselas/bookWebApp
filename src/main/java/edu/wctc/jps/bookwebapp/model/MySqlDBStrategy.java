@@ -5,6 +5,7 @@
  */
 package edu.wctc.jps.bookwebapp.model;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,12 +19,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.enterprise.context.Dependent;
+
 
 /**
  *
  * @author John
  */
-public class MySqlDBStrategy implements DBStrategy{
+@Dependent 
+public class MySqlDBStrategy implements DBStrategy,Serializable{
     
     private Connection conn;
     
@@ -48,6 +52,7 @@ public class MySqlDBStrategy implements DBStrategy{
       conn.close();  
     
     }
+    @Override
     public int insertRecord(String tableName, List <String> colNames, List <Object>colValues) throws SQLException{ 
         int recordsInserted = 0;
         PreparedStatement prepStmt = null;

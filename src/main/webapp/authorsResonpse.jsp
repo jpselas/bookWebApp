@@ -63,7 +63,7 @@
                 </c:forEach>
         </table></div>
     
-    <center><a class="btn btn-danger" href="index.html">Go Back</a></center>
+    <center><a class="btn btn-danger" href="index.jsp">Go Back</a></center>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     </body>
 </html>

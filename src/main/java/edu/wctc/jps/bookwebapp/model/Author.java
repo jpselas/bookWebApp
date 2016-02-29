@@ -24,6 +24,15 @@ public class Author {
         this.authorName = authorName;
         this.dateAdded = dateAdded;
     }
+
+    public Author(int authorId, String authorName) {
+        this.authorId = authorId;
+        this.authorName = authorName;
+    }
+
+    public Author(String authorName) {
+        this.authorName = authorName;
+    }
     
     
 
