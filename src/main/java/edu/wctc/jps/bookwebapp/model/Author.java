@@ -34,7 +34,10 @@ public class Author {
         this.authorName = authorName;
     }
     
-    
+    public Author(String authorName, Date dateAdded) {
+        this.authorName = authorName;
+        this.dateAdded = dateAdded;
+    }
 
     
     

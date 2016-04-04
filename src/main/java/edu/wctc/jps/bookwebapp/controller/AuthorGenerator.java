@@ -57,7 +57,7 @@ public class AuthorGenerator extends HttpServlet {
 
         if (buttonType.equals("add")) {
             String authorName = request.getParameter("authorName");
-
+            
             Author author = new Author(authorName);
             as.insertAuthor(author);
             getListOfAuthors(request, as);

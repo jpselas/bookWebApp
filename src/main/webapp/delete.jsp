@@ -16,9 +16,9 @@
         <title>Author List</title>
     </head>
     <body>
-        <h1>Author List</h1>
+    <center><h1>Author List</h1></center>
         
-       <form method="POST" action="AuthorGenerator?action=delete">
+    <center><form method="POST" action="AuthorGenerator?action=delete">
                         
                         <input type="submit" value="Delete" name="submit" />
                         <br><br>
@@ -49,7 +49,7 @@
                        
                         <input type="submit" value="Delete" name="submit" />
                     </form>
-        <p>Return to <a href="index.jsp">Home Page</a></p>
+        <p>Return to <a href="index.jsp">Home Page</a></p></center>
         
     </body>
 </html>

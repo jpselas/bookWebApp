@@ -72,7 +72,7 @@ public class AuthorDao implements AuthorDaoStrategy,Serializable {
         
             db.openConnection(driver, url, user, pwd);
             List<String> authorColumns = Arrays.asList(AUTHOR_NAME, DATE_ADDED);;
-            List<Object> authorValues = Arrays.asList(author.getAuthorName(), author.getDateAdded());
+            List<Object> authorValues = Arrays.asList(author.getAuthorName(), new Date());
             int numAuthor = db.insertRecord(TABLE_NAME, authorColumns, authorValues);
             
         
