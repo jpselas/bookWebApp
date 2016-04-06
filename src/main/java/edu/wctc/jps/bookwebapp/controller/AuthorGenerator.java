@@ -5,8 +5,9 @@
  */
 package edu.wctc.jps.bookwebapp.controller;
 
+import edu.wctc.jps.bookwebapp.ejb.AbstractFacade;
+import edu.wctc.jps.bookwebapp.ejb.AuthorFacade;
 import edu.wctc.jps.bookwebapp.model.Author;
-import edu.wctc.jps.bookwebapp.model.AuthorService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -29,13 +30,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "AuthorGenerator", urlPatterns = {"/AuthorGenerator"})
 public class AuthorGenerator extends HttpServlet {
 
-    private String driverClass;
-    private String url;
-    private String userName;
-    private String password;
+   
+
 
     @Inject
-    private AuthorService as;
+    private AbstractFacade<Author> as;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,67 +50,68 @@ public class AuthorGenerator extends HttpServlet {
         
         response.setContentType("text/html;charset=UTF-8");
         String[] authorIds = null;
-        configDbConnection();
-
+        Author author = null;
+       
         String buttonType = request.getParameter("action");
 
         if (buttonType.equals("add")) {
             String authorName = request.getParameter("authorName");
-            
-            Author author = new Author(authorName);
-            as.insertAuthor(author);
-            getListOfAuthors(request, as);
+            author = new Author();
+            author.setAuthorName(authorName);
+            author.setDateAdded(new Date());
+            as.create(author);
+            getListOfAuthors(request);
             RequestDispatcher view = request.getRequestDispatcher("/authorsResonpse.jsp");
             view.forward(request, response);
         } else if (buttonType.equals("delete")) {
             authorIds = request.getParameterValues("authorId");
             for (String id : authorIds) {
-                as.deleteAuthorById(id);
+                author = as.find(new Integer(id));
+                as.remove(author);
             }
-            getListOfAuthors(request, as);
+            getListOfAuthors(request);
             RequestDispatcher view = request.getRequestDispatcher("/authorsResonpse.jsp");
             view.forward(request, response);
         } else if (buttonType.equals("listDelete")) {
-            getListOfAuthors(request, as);
+            getListOfAuthors(request);
             RequestDispatcher view = request.getRequestDispatcher("/delete.jsp");
             view.forward(request, response);
         } else if (buttonType.equals("listEdit")) {
-            getListOfAuthors(request, as);
+            getListOfAuthors(request);
             RequestDispatcher view = request.getRequestDispatcher("/editRecord.jsp");
             view.forward(request, response);
         } else if (buttonType.equals("find")) {
-            getListOfAuthors(request, as);
+            getListOfAuthors(request);
             RequestDispatcher view = request.getRequestDispatcher("/authorsResonpse.jsp");
             view.forward(request, response);
         } else if (buttonType.equals("edit")) {
              authorIds = request.getParameterValues("authorId");
              
             request.setAttribute("authorId", authorIds[0]);
-            getListOfAuthors(request, as);
+            getListOfAuthors(request);
             RequestDispatcher view = request.getRequestDispatcher("/edit.jsp");
             view.forward(request, response);
         }else if (buttonType.equals("change")) {
-            authorIds = request.getParameterValues("authorId");
+            String authorId = request.getParameter("authorId");
             String authorName = request.getParameter("authorName");
+            author = as.find(new Integer(authorId));
+                        author.setAuthorName(authorName);
             
-            as.updateAuthorbyId(authorIds[0],authorName);
-            
-            getListOfAuthors(request, as);
+            as.edit(author);
+            getListOfAuthors(request);
             RequestDispatcher view = request.getRequestDispatcher("/authorsResonpse.jsp");
             view.forward(request, response);
         }
 
     }
 
-    public void getListOfAuthors(HttpServletRequest request, AuthorService as) throws SQLException, ClassNotFoundException {
-        List<Author> authors = as.getAuthorList();
+    public void getListOfAuthors(HttpServletRequest request) throws SQLException, ClassNotFoundException {
+        List<Author> authors = as.findAll();
         request.setAttribute("authors", authors);
 
     }
 
-    private void configDbConnection() {
-        as.getDao().initDao(driverClass, url, userName, password);
-    }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -164,13 +164,6 @@ public class AuthorGenerator extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    @Override
-    public void init() throws ServletException {
-        // get init params from web.xml file
-        driverClass = getServletContext().getInitParameter("db.driver.class");
-        url = getServletContext().getInitParameter("db.url");
-        userName = getServletContext().getInitParameter("db.username");
-        password = getServletContext().getInitParameter("db.password");
-    }
+    
 
 }
