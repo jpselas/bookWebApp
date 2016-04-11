@@ -5,9 +5,9 @@
  */
 package edu.wctc.jps.bookwebapp.controller;
 
-import edu.wctc.jps.bookwebapp.ejb.AbstractFacade;
-import edu.wctc.jps.bookwebapp.ejb.AuthorFacade;
-import edu.wctc.jps.bookwebapp.model.Author;
+
+import edu.wctc.jps.bookwebapp.entity.Author;
+import edu.wctc.jps.bookwebapp.service.AuthorService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -33,8 +33,8 @@ public class AuthorGenerator extends HttpServlet {
    
 
 
-    @Inject
-    private AbstractFacade<Author> as;
+    
+    private AuthorService as;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,14 +59,14 @@ public class AuthorGenerator extends HttpServlet {
             author = new Author();
             author.setAuthorName(authorName);
             author.setDateAdded(new Date());
-            as.create(author);
+            
             getListOfAuthors(request);
             RequestDispatcher view = request.getRequestDispatcher("/authorsResonpse.jsp");
             view.forward(request, response);
         } else if (buttonType.equals("delete")) {
             authorIds = request.getParameterValues("authorId");
             for (String id : authorIds) {
-                author = as.find(new Integer(id));
+                author = as.findById(id);
                 as.remove(author);
             }
             getListOfAuthors(request);
@@ -94,7 +94,7 @@ public class AuthorGenerator extends HttpServlet {
         }else if (buttonType.equals("change")) {
             String authorId = request.getParameter("authorId");
             String authorName = request.getParameter("authorName");
-            author = as.find(new Integer(authorId));
+            author = as.findById(authorId);
                         author.setAuthorName(authorName);
             
             as.edit(author);
