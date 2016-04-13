@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-     version="3.1">
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <!--
-This is an example of an application
--
-wide init param. 
-It's called a ServletContext init param. You can have as many 
-init params as you want but there is only one servlet context; 
-remember, all of these params are global to your app and can be 
-accesse
-d from any JSP page or servlet, which may not be what y
-ou 
-want. If not, see below. 
--->
-
-<context-param>
-        <param-name>db.jndi.name</param-name>
-        <param-value>jdbc/book</param-value>
-    </context-param>
+        This is an example of an application-wide init param. It's called a 
+        ServletContext init param. You can have as many init params as you want 
+        but there is only one servlet context; remember, all of these params 
+        are global to your app and can be accessed from any JSP page or
+        servlet, which may not be what you want. If not, see below.
+    -->
+    
+    <!-- YOU DON'T NEED BOTH, SO CHOOSE EITHER THE ABOVE STYLE OR BELOW STYLE -->
+    <!--
+        This is an example of an servlet-specific init param. It's called a 
+        ServletConfig init param. You must configure these as part of your
+        overall servlet configuration, so there's separate init params for 
+        each servlet if desired. And those params can only be used by the 
+        servlet you've configured them for. You can't use annotations on servlets 
+        where you need these init params. So configure them here.
+    -->
+    <servlet>
+        <!-- first alias, private to config -->
+        <servlet-name>AuthorGenerator</servlet-name>
+        <servlet-class>edu.wctc.jps.bookwebapp.controller.AuthorGenerator</servlet-class>
+        <!-- must be last item in servlet config -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>BookController</servlet-name>
+        <servlet-class>edu.wctc.jps.bookwebapp.controller.BookController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <!-- reference private config alias -->
+        <servlet-name>AuthorGenerator</servlet-name>
+        <!-- second alias is the one you use in your links -->
+        <url-pattern>/AuthorGenerator</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookController</servlet-name>
+        <url-pattern>/BookController</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

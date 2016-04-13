@@ -11,6 +11,8 @@ import edu.wctc.jps.bookwebapp.model.Author;
 import edu.wctc.jps.bookwebapp.model.Book;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -53,22 +55,18 @@ public class BookController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, Exception {
         response.setContentType("text/html;charset=UTF-8");
 
-        String destination = LIST_PAGE;
+        String destination;
         String action = request.getParameter(ACTION_PARAM);
         Book book = null;
 
-        try {
-            /*
-             Determine what action to take based on a passed in QueryString
-             Parameter
-             */
+        
             switch (action) {
                 case LIST_ACTION:
-                    this.refreshBookList(request, bookService);
-                    this.refreshAuthorList(request, authService);
+                    refreshBookList(request, bookService);
+                    refreshAuthorList(request, authService);
                     destination = LIST_PAGE;
                     break;
 
@@ -167,9 +165,7 @@ public class BookController extends HttpServlet {
                     break;
             }
 
-        } catch (Exception e) {
-            request.setAttribute("errMsg", e.getCause().getMessage());
-        }
+       
 
         // Forward to destination page
         RequestDispatcher dispatcher
@@ -202,7 +198,11 @@ public class BookController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(BookController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -216,7 +216,11 @@ public class BookController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(BookController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
