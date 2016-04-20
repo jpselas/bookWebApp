@@ -8,6 +8,7 @@ package edu.wctc.jps.bookwebapp.controller;
 
 import edu.wctc.jps.bookwebapp.entity.Author;
 import edu.wctc.jps.bookwebapp.service.AuthorService;
+import edu.wctc.jps.bookwebapp.service.BookService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -17,11 +18,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  *
@@ -56,10 +60,10 @@ public class AuthorGenerator extends HttpServlet {
 
         if (buttonType.equals("add")) {
             String authorName = request.getParameter("authorName");
-            author = new Author();
+            author = new Author(0);
             author.setAuthorName(authorName);
             author.setDateAdded(new Date());
-            
+            as.edit(author);
             getListOfAuthors(request);
             RequestDispatcher view = request.getRequestDispatcher("/authorsResonpse.jsp");
             view.forward(request, response);
@@ -164,6 +168,14 @@ public class AuthorGenerator extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
+    @Override
+    public void init() throws ServletException {
+        // Ask Spring for object to inject
+        ServletContext sctx = getServletContext();
+        WebApplicationContext ctx
+                = WebApplicationContextUtils.getWebApplicationContext(sctx);
+        as = (AuthorService) ctx.getBean("authorService");
+        
+    }
 
 }

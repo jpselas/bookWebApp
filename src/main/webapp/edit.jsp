@@ -41,7 +41,7 @@
                                 <c:when test="${not empty authorId}">
                                     <tr>
                                         <td style="background-color: black;color:white;" align="left">Date Added</td>
-                                        <td align="left"><input type="text"  name="dateAdded" readonly /></td>
+                                        <td align="left"><input type="text" value="${dateAdded}"  name="dateAdded" readonly /></td>
                                     </tr>         
                                 </c:when>
                             </c:choose>

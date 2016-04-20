@@ -5,6 +5,7 @@
      xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
      version="3.1">
     
+    
     <!-- Begin Spring-specific configuration -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -18,23 +19,29 @@
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
     <!-- END Spring configuration -->
-    <!--
-This is an example of an application
--
-wide init param. 
-It's called a ServletContext init param. You can have as many 
-init params as you want but there is only one servlet context; 
-remember, all of these params are global to your app and can be 
-accesse
-d from any JSP page or servlet, which may not be what y
-ou 
-want. If not, see below. 
--->
+    
+    <servlet>
+        <!-- first alias, private to config -->
+        <servlet-name>AuthorGenerator</servlet-name>
+        <servlet-class>edu.wctc.jps.bookwebapp.controller.AuthorGenerator</servlet-class>
+        <!-- must be last item in servlet config -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>BookController</servlet-name>
+        <servlet-class>edu.wctc.jps.bookwebapp.controller.BookController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <!-- reference private config alias -->
+        <servlet-name>AuthorGenerator</servlet-name>
+        <!-- second alias is the one you use in your links -->
+        <url-pattern>/AuthorGenerator</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookController</servlet-name>
+        <url-pattern>/BookController</url-pattern>
+    </servlet-mapping>
 
-<context-param>
-        <param-name>db.jndi.name</param-name>
-        <param-value>jdbc/book</param-value>
-    </context-param>
     <session-config>
         <session-timeout>
             30

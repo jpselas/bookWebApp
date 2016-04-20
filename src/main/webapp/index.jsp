@@ -94,6 +94,7 @@
                 <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#editRecord" href="AuthorGenerator?action=listEdit">Edit</a>
                 <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#deleteRecord" href="AuthorGenerator?action=listDelete">Delete</a>
                 <a class="btn btn-primary btn-lg" href="AuthorGenerator?action=find">View All Authors</a>
+                <a class="btn btn-primary btn-lg" href="BookController?action=list">View All Books</a>
 
             </div></div></center>
 
